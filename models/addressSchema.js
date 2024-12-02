@@ -49,4 +49,4 @@ const addressSchema= new Schema({
 
 const Address = mongoose.model("Address,addressSchema");
 
-module.
+module.exports = address;
