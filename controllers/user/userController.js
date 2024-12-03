@@ -1,4 +1,3 @@
-
 const User = require("../../models/userSchema");
 
 const env = require("dotenv").config();
@@ -34,17 +33,6 @@ const loadSignup = async(req,res)=>{
         res.status(500).send("Server error");
     }
 }
-// const signup = async(req,res)=>{
-//     const {name,email,phone,password} = req.body;
-//     try{
-//        const  newUser = new User({name,email,phone,password});
-//        await newUser.save();
-//        return res.redirect("/signup")
-//     }catch(error){
-//        console.log("Error for save user", error);
-//        res.status(500).send("Internal server error");
-//     }
-// }
 
 function generateOtp(){
     return Math.floor(100000 + Math.random()*900000).toString();
@@ -79,70 +67,34 @@ async function sendVerificationEmail(email,otp){
     }
 }
 
-// const signup = async (req, res) => {
-//     const { name, email, phone, password } = req.body;
-//     try {
-//         // Check if the email is already registered
-//         const findUser = await User.findOne({ email });
-//         if (findUser) {
-//             // return res.status(400).send("Email is already registered.");
-//            return res.render("signup",{message:"user with this email already exists"});
-//         }
-    
-//         // If not, create a new user
-//         const newUser = new User({ name, email, phone, password });
-//         await newUser.save();
-
-//         return res.redirect("/signup");
-//     } catch (error) {
-//         console.log("Error for save user", error);
-
-//         // Handle specific MongoDB duplicate key errors
-//         if (error.code === 11000) {
-//             const key = Object.keys(error.keyPattern)[0]; // e.g., 'email' or 'googleId'
-//             return res.status(400).send(`${key} is already in use.`);
-//         }
-
-//         // Handle other errors
-//         res.status(500).send("Internal server error.");
-//     }
-// };
-
-const signup = async(req,res)=>{
-   
-    const {name,email,phone,password} = req.body;
+const signup = async (req, res) => {
     try {
-        const findUser = await User.findOne({email});
-        if(findUser){
-            return res.render("signup",{message:"User with this email already exists"});
-
-        }
-        const newUser = new User({name,email,phone,password});
-        await newUser.save();
+        const { name, email, phone, password } = req.body;
         
+        // Check if user already exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.render("signup", { message: "Email already registered. Please use a different email." });
+        }
+
+        // Generate and send OTP
         const otp = generateOtp();
-       
+        const emailSent = await sendVerificationEmail(email, otp);
         
-        const emailSent = await sendVerificationEmail(email,otp);
-        if(!emailSent){
-            return res.json("email.error")
+        if (!emailSent) {
+            return res.render("signup", { message: "Failed to send OTP. Please try again." });
         }
+
+        // Store user data and OTP in session
+        req.session.userData = { name, email, phone, password, otp };
+        console.log("OTP Sent", otp);
         
-
-        req.session.userOtp = otp;
-        req.session.userData = {name,email,phone,password};
-
-         res.render("verifyotp");
-         console.log("OTP Sent",otp);
-         
-
+ res.redirect("/verifyotp");
     } catch (error) {
-        console.error("signup error",error);
-        res.redirect("/pageNotFound")
-        
+        console.error("Error in signup:", error);
+        return res.render("signup", { message: "An error occurred. Please try again." });
     }
-}
-
+};
 
 const securepassword = async(password)=>{
     try {
@@ -155,41 +107,96 @@ const securepassword = async(password)=>{
 }
 
 
-const verifyOtp = async(req,res)=>{
-    console.log("hello")
+const verifyOtp = async (req, res) => {
     try {
-      const {otp} = req.body  
-      console.log("hello",otp);
+        const { otp } = req.body;
+        const userData = req.session.userData;
 
-      if(otp===req.session.userOtp){
-        const user = req.session.userData
-        const passwordHash = await securepassword(user.password);
-     
-       const saveUserData = new User({
-        name:user.name,
-        email:user.email,
-        phone:user.phone,
-        password:passwordHash
-       })
-      
-       await saveUserData.save();
-       req.session.user = saveUserData._id;
-       res.json({success:true,redirectUrl:"/"})
-     }else{
-        res.status(400).json({success:false,message:"Invalid OTP, please try again"});
-     }
-      
+        console.log(req.session)
+
+        if (!userData || !userData.otp) {
+            return res.render("signup", { message: "Session expired. Please try again." });
+        }
+
+        
+       
+        if (otp !== userData.otp) {
+            
+            return res.render("verifyotp", { 
+                email: userData.email,
+                message: "Invalid OTP. Please try again." 
+            });
+        }
+
+        // Hash password before saving
+        const hashedPassword = await securepassword(userData.password);
+        
+        // Create new user
+        const newUser = new User({
+            name: userData.name,
+            email: userData.email,
+            phone: userData.phone,
+            password: hashedPassword
+        });
+
+        await newUser.save();
+        
+        // Clear session data
+        delete req.session.userData;
+        
+        return res.redirect("/");
     } catch (error) {
-        console.error("Error Verifying OTP",error);
-        res.status(500).json({success:false,message:"An error occured"})
+        console.error("Error verifying OTP:", error);
+        if (error.code === 11000) {
+            return res.render("signup", { 
+                message: "This email is already registered. Please use a different email." 
+            });
+        }
+        return res.render("verifyotp", { 
+            email: req.session.userData?.email,
+            message: "An error occurred. Please try again." 
+        });
+    }
+};
+
+const loadVerifyOtp = async (req, res) => {
+    try {
+      if (!req.session.userData) {
+        return res.redirect("/signup"); // Redirect if userData is not present in session
+      }
+  
+      res.render("verifyotp", { email: req.session.userData.email });
+    } catch (error) {
+      console.error("Error loading verify OTP page:", error);
+      res.redirect("/pageNotFound");
+    }
+  };
+  
+
+  
+const resendOtp = async (req,res)=>{
+    console.log('hdhsd')
+    try {
+        const {email} = req.session.userData;
+        if(!email){
+            return res.status(400).json({success:false,message:"EMail not found in session"})
+
+        }
+        const otp = generateOtp();
+        req.session.userOtp = otp;
+
+        const emailSent = await sendVerificationEmail(email,otp);
+        if(emailSent){
+            console.log("resend otp", otp);
+            // res.status(200).json({success:true,message:"OTP Resend Successfully"})
+return res.redirect('/verifyotp')
+            
+        }
+    } catch (error) {
+        console.error("Error resending OTP",error);
+        res.status(500).json({success:false,message:"Internal server Error. please try again"})
     }
 }
-
-
-
-
-
-
 
 const loadShopping = async(req,res)=>{
     try{
@@ -203,10 +210,6 @@ const loadShopping = async(req,res)=>{
 }
 
 
-
-
-
-
 module.exports ={
     loadHomepage,
     pageNotFound,
@@ -214,5 +217,7 @@ module.exports ={
     signup,
     securepassword,
     verifyOtp,
-    loadShopping 
+    resendOtp,
+    loadShopping ,
+    loadVerifyOtp
 }

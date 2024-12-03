@@ -91,9 +91,13 @@
       </div>
       <div class="d-flex justify-content-between align-items-center mb-4">
         <span id="timer" class="timer">Valid for: 00:59</span>
-        <a href="#" class="resend-otp">Resend OTP</a>
+
       </div>
       <button type="submit" class="btn btn-primary w-100">Validate OTP</button>
+    </form>
+    <form action="/resend-otp" method="post">
+        <button id="resend-otp">resend-otp</button>
+
     </form>
   </div>
 
@@ -120,7 +124,31 @@
       } else {
         clearInterval(timerInterval);
         timerElement.textContent = "OTP expired!";
+        updateTimer();
+     
+        $ajax({
+            type:"POST",
+            url:"/resend-otp",
+            success:function(response){
+                if(response.success){
+                    Swal.fire({
+                        icon:"succss",
+                        title:"OTP Resend Successfully",
+                        showConfirmButton:false,
+                        timer:1500,
+                    })
+                }else{
+                    Swal.fire({
+                        icon:"error",
+                        title:"Error",
+                        text:"An error occured while resending OTP. Please try again "
+
+                    })
+                }
+            }
+        })
       }
+      return false
     }
 
     // Start the timer
@@ -132,7 +160,7 @@
 
     $.ajax({
         type:"POST",
-        url:"Varifyotp",
+        url:"Verifyotp",
         data:{otp:otpInput},
         success:function(response){
             if(response.success){
@@ -164,7 +192,7 @@
     return false;
  }
   
-  
+
   
   </script>
 </body>
