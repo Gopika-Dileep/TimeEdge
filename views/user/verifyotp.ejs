@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OTP Verification</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .otp-container {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .otp-container h1 {
+      font-weight: bold;
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+
+    .otp-container p {
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
+
+    .form-control {
+      background-color: #f1f3f5;
+      border: none;
+      padding-left: 45px;
+    }
+
+    .form-control:focus {
+      box-shadow: none;
+      outline: none;
+    }
+
+    .input-group-text {
+      background-color: #f1f3f5;
+      border: none;
+    }
+
+    .resend-otp {
+      color: #007bff;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .resend-otp:hover {
+      text-decoration: underline;
+    }
+
+    .btn-primary {
+      background-color: #000;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background-color: #333;
+    }
+
+    .timer {
+      color: #fd7e14;
+    }
+  </style>
+</head>
+<body>
+  <div class="otp-container">
+    <h1>OTP Verification</h1>
+    <p>Enter the 6-digit code that you will receive in your registered Email</p>
+    <form id="otpForm" action="/verifyotp" method="post" onsubmit="return validateOTPForm()">
+      <div class="input-group mb-3">
+        <span class="input-group-text">
+          <i class="bi bi-key"></i>
+        </span>
+        <input type="text" class="form-control" placeholder="OTP" name="otp" maxlength="6" required>
+      </div>
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <span id="timer" class="timer">Valid for: 00:59</span>
+        <a href="#" class="resend-otp">Resend OTP</a>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Validate OTP</button>
+    </form>
+  </div>
+
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+  <script>
+    // Timer logic
+    let timeRemaining = 59; // Total time in seconds
+    const timerElement = document.getElementById("timer");
+
+    function updateTimer() {
+      const minutes = Math.floor(timeRemaining / 60);
+      const seconds = timeRemaining % 60;
+
+      // Update the timer display
+      timerElement.textContent = `Valid for: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+      // Stop the timer when it reaches 0
+      if (timeRemaining > 0) {
+        timeRemaining--;
+      } else {
+        clearInterval(timerInterval);
+        timerElement.textContent = "OTP expired!";
+      }
+    }
+
+    // Start the timer
+    const timerInterval = setInterval(updateTimer, 1000);
+  
+  
+ function validateOtpForm(){
+    const otpInput = document.getElementById("otp").value;
+
+    $.ajax({
+        type:"POST",
+        url:"Varifyotp",
+        data:{otp:otpInput},
+        success:function(response){
+            if(response.success){
+                Swal.fire({
+                    icon:"success",
+                    title:"OTP Verified Successfully",
+                    showConfirmation:false,
+                    timer:1500,
+                }).then(()=>{
+                    window.location.href = response.redirectUrl;
+                })
+
+            }else{
+                Swal.fire({
+                    icon:"error",
+                    title:"Error",
+                    text:response.message
+                })
+            }
+        },
+        error:function(){
+            Swal.fire({
+                icon:"error",
+                title:"Invalid OTP",
+                text:"Please try again"
+            })
+        }
+    })
+    return false;
+ }
+  
+  
+  
+  </script>
+</body>
+</html>
