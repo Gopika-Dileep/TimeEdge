@@ -232,7 +232,9 @@ const loadLogin = async (req,res)=>{
 const login = async (req,res)=>{
     try {
         const {email,password} = req.body
-        const findUser = await User.findOne({isAdmin:0,email:email});
+        console.log(req.body,'reqobody')
+        const findUser = await User.findOne({email:email});
+        console.log('finduse',findUser)
         if(!findUser){
           return res.render("login", {message:"User not found"})
 
@@ -245,6 +247,7 @@ const login = async (req,res)=>{
             return res.render("login",{message:"Incorrect password"})
         }
         req.session.user = findUser._id;
+        console.log(req.session.user,'jhgh use')
         res.redirect("/")
     } catch (error) {
         console.error("login error",error);

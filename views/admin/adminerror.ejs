@@ -1,0 +1,41 @@
+<%- include("../../views/partials/admin/header") %>
+<head>
+  <link rel="stylesheet" href="/styles/admin-error.css">
+</head>
+<style>
+  .dashboard-wrapper {
+      position: absolute;
+      top: 70px;
+      left: 240px;
+      width: calc(100% - 240px);
+      padding: 2rem;
+  }
+  button {
+  background-color: blue;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: darkblue;
+}
+
+</style>
+
+<div class="dashboard-wrapper">
+  <h1>Error Page Admin</h1>
+  <p>An error occurred.</p>
+  <button onclick="godashboard()">Go to Home Page</button>
+</div>
+
+  <script>
+      function godashboard() {
+          window.location.href = "/admin";
+      }
+  </script>
+
+<%- include("../../views/partials/admin/footer") %>
