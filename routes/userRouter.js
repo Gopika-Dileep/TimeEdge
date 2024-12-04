@@ -26,6 +26,7 @@ router.get(
   
 
 router.get("/shop",userController.loadShopping);
+router.get("/logout",userController.logout);
 
 
 module.exports = router;

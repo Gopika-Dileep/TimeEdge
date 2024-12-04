@@ -5,6 +5,7 @@ const path = require ("path");
 const dotenv=require("dotenv");
 const session = require("express-session");
 const passport = require('./config/passport');
+const User = require('./models/userSchema')
 dotenv.config();
 
 const db = require("./config/db");
@@ -27,6 +28,22 @@ app.use(session({
         maxAge:72*60*60*1000
     }
 }))
+
+app.use(async (req, res, next) => {
+    try {
+        if (req.session.user) {
+            const user = await User.findById(req.session.user).select('name email'); // Fetch user details
+            res.locals.user = user; // Make user details available in templates
+        } else {
+            res.locals.user = null;
+        }
+        next();
+    } catch (error) {
+        console.error("Error in user middleware:", error);
+        res.locals.user = null;
+        next();
+    }
+});
 
 app.use(passport.initialize());
 app.use(passport.session())

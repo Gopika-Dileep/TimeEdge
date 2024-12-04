@@ -22,6 +22,38 @@
     <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
+<style>
+    .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    right: 0;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+</style>
 </head>
 
 <body>
@@ -36,7 +68,7 @@
         <div class="offcanvas__option">
             <div class="offcanvas__links">
                 <a href="/signup" class="sign-in-link">Sign up</a>
-                <a href="/login" class="sign-in-link">login in</a>
+                <a href="/login" class="sign-in-link">log in</a>
             </div>
             <div class="offcanvas__top__hover">
                 <span>Usd <i class="arrow_carrot-down"></i></span>
@@ -73,9 +105,20 @@
                     <div class="col-lg-6 col-md-5">
                         <div class="header__top__right">
                             <div class="header__top__links">
-                                <a href="/signup" class="sign-in-link">Sign up</a>
-                                <a href="/login" class="sign-in-link">log in</a>
+                                <% if (locals.user) { %>
+                                    <div class="dropdown">
+                                        <a href="#" class="sign-in-link"><%= locals.user.name %></a>
+                                        <div class="dropdown-content">
+                                            <a href="/userProfile">Profile</a>
+                                            <a href="/logout">Logout</a>
+                                        </div>
+                                    </div>
+                                <% } else { %>
+                                    <a href="/signup" class="sign-in-link">Sign up</a>
+                                    <a href="/login" class="sign-in-link">Log in</a>
+                                <% } %>
                             </div>
+                            
                             <div class="header__top__hover">
                                 <span>Usd <i class="arrow_carrot-down"></i></span>
                                 <ul>
