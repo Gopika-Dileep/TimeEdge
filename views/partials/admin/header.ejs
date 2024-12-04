@@ -1,0 +1,269 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>TimeEdge</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="#">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar styles */
+        .navbar-aside {
+            width: 250px;
+            height: 100%;
+            background-color: #1a202c;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            padding: 15px 0;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .navbar-aside .aside-top {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #2d3748;
+        }
+
+        .navbar-aside .brand-wrap p {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .menu-aside {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            flex-grow: 1;
+        }
+
+        .menu-aside .menu-item {
+            margin: 10px 0;
+        }
+
+        .menu-aside .menu-link {
+            display: flex;
+            align-items: center;
+            color: #a0aec0;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-aside .menu-link:hover,
+        .menu-aside .menu-link:focus {
+            background-color: #2d3748;
+            color: #ffffff;
+            border-radius: 5px;
+        }
+
+        .menu-aside .menu-link .icon {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+
+        /* Main content area */
+        .main-wrap {
+            margin-left: 250px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: auto;
+        }
+
+        .main-header {
+            background-color: #ffffff;
+            padding: 15px 20px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 9;
+        }
+
+        .main-header .col-nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .main-header .btn-mobile {
+            display: none;
+            background: none;
+            border: none;
+            color: #333;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .main-header .dropdown .img-xs {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .dropdown-menu {
+            min-width: 200px;
+            border-radius: 5px;
+            border: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            margin-top: 10px;
+        }
+
+        /* Mobile styles */
+        @media screen and (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .navbar-aside {
+                transform: translateX(-100%);
+                position: fixed;
+                height: 100vh;
+            }
+
+            .navbar-aside.active {
+                transform: translateX(0);
+            }
+
+            .main-wrap {
+                margin-left: 0;
+            }
+
+            .main-header .btn-mobile {
+                display: block;
+            }
+
+            .main-header {
+                position: sticky;
+                top: 0;
+                z-index: 11;
+            }
+
+            .menu-aside .menu-item {
+                margin: 8px 0;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .main-header {
+                padding: 10px 15px;
+            }
+
+            .main-header .btn-mobile {
+                font-size: 18px;
+            }
+
+            .navbar-aside .brand-wrap p {
+                font-size: 16px;
+            }
+
+            .menu-aside .menu-link {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+        }
+     
+    </style>
+</head>
+<body>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="#" class="brand-wrap">
+                <p>TimeEdge Dashboard</p>
+            </a>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin"> <i class="icon fas fa-th-large"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/products"> <i class="icon fas fa-box"></i>
+                        <span class="text">Products</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/orders"> <i class="icon fas fa-shopping-cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/customers"> <i class="icon fas fa-users"></i>
+                        <span class="text">Customers</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/offers"> <i class="icon fas fa-tags"></i>
+                        <span class="text">Offers</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/coupons"> <i class="icon fas fa-star"></i>
+                        <span class="text">Coupon</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/banner"> <i class="icon fas fa-images"></i>
+                        <span class="text">Banner Management</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/category"> <i class="icon fas fa-list"></i>
+                        <span class="text">Category</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/brands"> <i class="icon fas fa-cogs"></i>
+                        <span class="text">Brands</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <header class="main-header">
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile" id="mobileToggle"> <i class="fas fa-bars"></i> </button>
+                <ul class="nav">
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" href="#" id="dropdownAccount">
+                            <img class="img-xs rounded-circle" src="/images/person.png" alt="User">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </header>
+    </main>
+
+    <script>
+        // Sidebar toggle script
+        document.getElementById('mobileToggle').addEventListener('click', () => {
+            const sidebar = document.getElementById('offcanvas_aside');
+            sidebar.classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
