@@ -89,8 +89,8 @@
                     <th>#</th>
                     <th>Name</th>
                     <th>Description</th>
-                    <th>Offer Price</th>
-                    <th>Offer Actions</th>
+                    <!-- <th>Offer Price</th> -->
+                    <!-- <th>Offer Actions</th> -->
                     <th>Status</th>
                     <th>Actions</th>
                   </tr>
@@ -100,16 +100,16 @@
                     <% cat.reverse().forEach((category, index) => { %>
                       <tr class="align-middle">
                         <td class="text-center"><%= index + 1 %></td>
-                        <td><%= category.name %></td>
-                        <td><%= category.description %></td>
-                        <td class="text-center"><%= category.categoryOffer || '0%' %></td>
-                        <td class="text-center">
+                        <td class="text-center"><%= category.name %></td>
+                        <td class="text-center"><%= category.description %></td>
+                        <!-- <td class="text-center"><%= category.categoryOffer || '0%' %></td> -->
+                        <!-- <td class="text-center">
                           <% if (!category.categoryOffer) { %>
                             <button class="btn btn-info btn-sm" onclick="addOffer('<%= category._id %>')">Add Offer</button>
                           <% } else { %>
                             <button class="btn btn-danger btn-sm" onclick="removeOffer('<%= category._id %>')">Remove Offer</button>
                           <% } %>
-                        </td>
+                        </td> -->
                         <td class="text-center">
                           <% if (category.isListed) { %>
                             <span class="badge bg-success">Listed</span>
@@ -123,7 +123,7 @@
                           <% } else { %>
                             <a href="/admin/listCategory?id=<%= category._id %>" class="btn btn-success btn-sm text-white">List</a>
                           <% } %>
-                          <a href="/admin/edit-category?id=<%= category._id %>" class="btn btn-info btn-sm text-white">Edit</a>
+                          <a href="/admin/editCategory?id=<%= category._id %>" class="btn btn-info btn-sm text-white">Edit</a>
                         </td>
                       </tr>
                     <% }); %>
@@ -139,7 +139,25 @@
         </div>
       </div>
     </div>
-
+    <div class="pagination-container mt-4">
+      <ul class="pagination justify-content-center">
+        <% if (currentPage > 1) { %>
+          <li class="page-item">
+            <a class="page-link" href="?page=<%= currentPage - 1 %>">&laquo; Previous</a>
+          </li>
+        <% } %>
+        <% for (let i = 1; i <= totalPages; i++) { %>
+          <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+            <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+          </li>
+        <% } %>
+        <% if (currentPage < totalPages) { %>
+          <li class="page-item">
+            <a class="page-link" href="?page=<%= currentPage + 1 %>">Next &raquo;</a>
+          </li>
+        <% } %>
+      </ul>
+    </div>
    
   </section>
 

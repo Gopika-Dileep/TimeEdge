@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const User = require("../../models/userSchema");
 
 
@@ -84,6 +85,9 @@ const customerInfo = async (req, res) => {
 const blockUser = async (req,res)=>{
    try {
      const userId = req.params.userId;
+     if(!mongoose.Types.ObjectId.isValid(userId)){
+        throw new Error("Invalid User ID")
+     }
      const userUpdate = await User.findByIdAndUpdate({_id:userId},{isBlocked:true})
      return res.redirect('/admin/users')
 
@@ -95,6 +99,9 @@ const blockUser = async (req,res)=>{
 const unblockUser = async (req,res)=>{
     try {
       const userId = req.params.userId;
+      if(!mongoose.Types.ObjectId.isValid(userId)){
+        throw new Error("Invalid User ID")
+     }
       const userUpdate = await User.findByIdAndUpdate({_id:userId},{isBlocked:false})
       return res.redirect('/admin/users')
  

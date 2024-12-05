@@ -30,7 +30,7 @@
 
     <!-- Search Form -->
     <header class="card-header text-center mb-4">
-      <form action="/admin/edit-category" method="GET" class="d-inline">
+      <form action="/admin/editCategory" method="GET" class="d-inline">
         <div class="input-group input-group-sm border border-1 border-grey rounded-pill" style="max-width: 500px; margin: auto;">
           <input
             type="text"
@@ -87,7 +87,7 @@
     const description = document.getElementById("descriptionId").value.trim();
 
     
-        fetch(`/admin/edit-category/${categoryId}`, {
+        fetch(`/admin/editCategory/${categoryId}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

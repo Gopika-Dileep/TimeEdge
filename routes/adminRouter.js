@@ -14,10 +14,18 @@ router.get("/user-block/:userId",customerController.blockUser)
 router.get("/user-unblock/:userId",customerController.unblockUser)
 router.get("/users",adminAuth,customerController.customerInfo);
 
-router.get("/category",adminAuth,adminController.category);
-router.post("/addCategory",adminAuth,adminController.addCategory);
+// router.get("/category",adminAuth,adminController.category);
+// router.post("/addCategory",adminAuth,adminController.addCategory);
 
-router.get("/edit-category",adminAuth,adminController.editCategoryPage);
-router.post("/edit-category/:categoryId",adminAuth,adminController.editCategory);
+//Category Management.....................
+router.get("/category", adminAuth, adminController.category);
+router.post("/addCategory", adminAuth, adminController.addCategory);
+router.get("/listCategory", adminAuth, adminController.getUnlistedCategory);
+router.get("/unlistCategory", adminAuth,adminController.getListedCategory);
+router.get("/editCategory",adminAuth,adminController.getEditCategory)
+router.post("/editCategory/:categoryId",adminAuth,adminController.editCategory);
+
+// router.get("/addProduct", adminAuth, adminController.addProduct);
+
 
 module.exports = router;
