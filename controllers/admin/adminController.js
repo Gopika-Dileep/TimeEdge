@@ -1,9 +1,7 @@
 const User = require("../../models/userSchema");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-
-
-
+const Category = require('../../models/categorySchema')
 
 
 
@@ -73,10 +71,119 @@ const logout = async (req,res)=>{
     }
 }
 
+const category = async (req,res)=>{
+  try{
+    const cat = await Category.find()
+    return res.render("category",{cat})
+  
+  }catch(error){
+    console.log(error)
+  }
+
+}
+
+
+const addCategory = async (req,res)=>{
+    try{
+        const {name,description} = req.body;
+        console.log(description,'description')
+
+      const cat = await Category({
+        name:name,
+        description:description
+      })
+      const categorySave = cat.save()
+      return res.redirect("category")
+    
+    }catch(error){
+      console.log(error)
+    }
+  
+  }
+
+  const editCategoryPage = async (req,res)=>{
+    try{
+        const categoryId = req.query.id;
+        const category = await Category.findById({_id:categoryId})
+      return res.render("updateCategory",{category:category})
+    
+    }catch(error){
+      console.log(error,'editCategoryPage')
+    }
+  
+  }
+
+  const editCategory = async (req, res) => {
+    try {
+        const categoryId = req.params.categoryId;
+        const { name, description } = req.body;
+
+        const existingCategory = await Category.findOne({ name });
+        if (existingCategory && existingCategory._id.toString() !== categoryId) {
+            return res.json({
+                success: false,
+                message: 'Category with this name already exists'
+            });
+        }
+
+        const category = await Category.findById(categoryId);
+        if (!category) {
+            return res.status(404).json({
+                success: false,
+                message: 'Category not found'
+            });
+        }
+
+        const updatedCategory = await Category.findByIdAndUpdate(
+            categoryId,
+            { name: name || category.name, description: description || category.description },
+            { new: true }
+        );
+
+        if (updatedCategory) {
+            console.log(updatedCategory)
+            return res.redirect("category");
+        }
+
+        return res.status(500).json({
+            success: false,
+            message: 'Error updating category'
+        });
+
+    } catch (error) {
+        console.log(error, 'editCategory');
+        return res.status(500).json({
+            success: false,
+            message: 'Server error occurred'
+        });
+    }
+};
+
+
+//   const editCategory= async (req,res)=>{
+//     try{
+//         const categoryId = req.params.categoryId;
+//         const {name,description} = req.body;
+//         const category = await Category.findById({_id:categoryId})
+//         const updateCategory = await Category.findByIdAndUpdate({_id:categoryId},{
+//             name:name || category.name,
+//             description:description || category.description
+//         })
+//       return res.redirect("category")
+    
+//     }catch(error){
+//       console.log(error,'editCategory')
+//     }
+  
+//   }
 module.exports = {
     pageerror,
     loadAdminLogin,
     login,
     loadDashboard,
-    logout
+    logout,
+    category,
+    addCategory,
+    editCategoryPage,
+    editCategory
 }

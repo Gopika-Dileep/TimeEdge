@@ -79,13 +79,11 @@ const signup = async (req, res) => {
     try {
         const { name, email, phone, password } = req.body;
         
-        // Check if user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.render("signup", { message: "Email already registered. Please use a different email." });
         }
 
-        // Generate and send OTP
         const otp = generateOtp();
         const emailSent = await sendVerificationEmail(email, otp);
         
@@ -93,7 +91,6 @@ const signup = async (req, res) => {
             return res.render("signup", { message: "Failed to send OTP. Please try again." });
         }
 
-        // Store user data and OTP in session
         req.session.userData = { name, email, phone, password, otp };
         console.log("OTP Sent", otp);
         
@@ -136,7 +133,6 @@ const verifyOtp = async (req, res) => {
             });
         }
 
-        // Hash password before saving
         const hashedPassword = await securepassword(userData.password);
         
         // Create new user
@@ -220,7 +216,7 @@ const loadShopping = async(req,res)=>{
 const loadLogin = async (req,res)=>{
     try{
         if(!req.session.user){
-            return res.render("Login")
+            return res.render("login",{ message: "" })
         }else{
             res.redirect('/')
         }
@@ -232,9 +228,7 @@ const loadLogin = async (req,res)=>{
 const login = async (req,res)=>{
     try {
         const {email,password} = req.body
-        console.log(req.body,'reqobody')
         const findUser = await User.findOne({email:email});
-        console.log('finduse',findUser)
         if(!findUser){
           return res.render("login", {message:"User not found"})
 

@@ -60,6 +60,11 @@
                 <div class="login-form">
                     <h2>Login</h2>
                     <form action="/login" method="post">
+                        <% if (message) { %>
+                            <div class="alert alert-danger" role="alert">
+                                <%= message %>
+                            </div>
+                        <% } %>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email">
@@ -72,6 +77,7 @@
                             <a href="#" class="text-decoration-none">Forgot password?</a>
                         </div>
                         <button type="submit" class="btn btn-dark w-100">Login</button>
+                        <span></span>
                     </form>
                     <div class="mt-3 text-center">
                         <p>Don't have an account? <a href="#" class="text-decoration-none">Sign up here</a></p>
