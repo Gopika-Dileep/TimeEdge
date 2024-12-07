@@ -24,6 +24,10 @@ const productSchema = new Schema({
         type:Number,
         required:true
     },
+    salePrice:{
+        type:Number,
+        required:true
+    },
     productOffer:{
         type:Number,
         default:0,
@@ -33,14 +37,14 @@ const productSchema = new Schema({
         default:true
     },
     color:{
-        type:string,
+        type:String,
         required:true
     },
     productImage:{
         type:[String],
         required:true
     },
-    isBlocked:{
+    isListed:{
         type:Boolean,
         default:false
     },
