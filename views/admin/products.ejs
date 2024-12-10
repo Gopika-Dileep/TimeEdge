@@ -109,20 +109,24 @@
 
                             </td>
                             <td>
-                                <div class="d-flex justify-content-between ">
-                                    <a href="#" class="btn  me-2 " style="width: 100px;  background-color: #4CAF50; ">
-                                        Add Offer
-                                    </a>
-
-                                    <a href="#">
-                                        <i class="fas fa-trash me-2 " style="color: red;"></i>
-                                    </a>
+                                <div class="d-flex justify-content-between">
+                                    <% if (data[i].productOffer) { %> 
+                                        <button onclick="removeOffer('<%=data[i]._id%>')" class="btn btn-danger">
+                                            <i class="fas fa-trash me-2"></i> Remove Offer
+                                        </button>
+                                    <% } else { %> 
+                                        <button onclick="addOffer('<%=data[i]._id%>')" class="btn btn-success">
+                                            <i class="fas fa-plus me-2"></i> Add Offer
+                                        </button>
+                                    <% } %>
                                 </div>
                             </td>
                             
-                            <td> <a href="/admin/editProduct?id=<%=data[i]._id%>" class="text-black"
-                                    style="text-decoration: none;"><i class="fas fa-pencil-alt me-2"></i></a>
-
+                            
+                            <td>
+                              <button> <a href="/admin/editProduct?id=<%=data[i]._id%>" class="text-black"
+                                style="text-decoration: none;"><i class="fas fa-pencil-alt me-2"></i></a>
+                                 </button>
                             </td>
 
                         </tr>
@@ -156,4 +160,86 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+   <script>
+
+async function addOffer(productId) {
+    const { value: amount } = await Swal.fire({
+        title: "Offer in percentage",
+        input: "number",
+        inputLabel: "Percentage",
+        inputPlaceholder: '%',
+    });
+
+    if (amount !== null) { // Check if a value was provided
+        $.ajax({
+            url: "/admin/addProductOffer",
+            method: "POST",
+            data: {
+                percentage: amount,
+                productId: productId,
+            },
+            success: (response) => {
+                if (response.status === true) { // Use 'response' instead of 'responsive'
+                    Swal.fire('Offer added', 'The offer has been added successfully', 'success').then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire('Failed', 'Unable to add the offer', 'error');
+                }
+            },
+            error: (err) => {
+                console.error(err);
+                Swal.fire('Error', 'An error occurred while adding the offer', 'error');
+            },
+        });
+    }
+}
+
+
+function removeOffer(productId){
+    try {
+        Swal.fire({
+            title:"Remove offer",
+            text:"Are you sure you want to remove this offer",
+            icon:"warning",
+            showCancelButton:true,
+            confirmButtonColor:'#3085d6',
+            cancelButtonColor:'d33',
+            confirmButtonText:'Yes,remove it!',
+            // timer:5000,
+            timerProgressBar:true
+        }).then(async (result)=>{
+            if(result.isConfirmed){
+                $.ajax({
+                    url:"/admin/removeProductOffer",
+                    method:'post',
+                    data:{
+                        productId:productId
+                    },
+                    success:(response)=>{
+                        if(response.status===true){
+                            Swal.fire("removed!","The offer has been removed","success");
+                            location.reload()
+                        }else if(response.status===false){
+                            Swal.fire('failed');
+                        }else{
+                            alert('failed')
+                        }
+                    }
+                })
+            }
+        })
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+
+
+   </script>
+   
+   
+   
+   
+   
     <%- include("../../views/partials/admin/footer") %>
