@@ -1,5 +1,7 @@
 const User = require("../../models/userSchema");
-
+const Category = require('../../models/categorySchema');
+const Product= require("../../models/productSchema");
+const Banner = require("../../models/bannerSchema");
 const env = require("dotenv").config();
 const nodemailer = require("nodemailer");
 
@@ -18,13 +20,30 @@ const pageNotFound = async(req,res)=>{
 
 const loadHomepage = async (req,res)=>{
     try {
-        const useremail = req.session.user.email;
+        const today = new Date().toISOString();
+        const findBanner = await Banner.find({
+            endDate:{$gt:new Date(today)}
+        })
+        const userId = req.session.user;
+        const categories = await Category.find();
+
+        let productData = await Product.find(
+            {isListed:false,
+                category:{$in:categories.map(category=>category._id)},quantity:{$gt:0}
+            }
+        ).sort({createdAt :-1}).limit(4)
         
-        if(useremail){
-            const userData = await User.findOne({email:useremail});
-            res.render("home",{user:userData})
+        // productData.sort((a,b)=>new Data (b.createdAt)-new Date(a.createdAt));
+        // productData = productData.slice(0,4);
+console.log(findBanner,'banner')
+        if(userId){
+            const userData = await User.findById({_id:userId});
+            console.log(productData,'useri here')
+            res.render("home",{user:userData,products:productData,banner:findBanner || []});
         }else{
-            return res.render("home");
+            
+         
+            return res.render("home",{products:productData,banner:findBanner || []}                            );
         }
        
     }catch (error){
@@ -241,7 +260,6 @@ const login = async (req,res)=>{
             return res.render("login",{message:"Incorrect password"})
         }
         req.session.user = findUser._id;
-        console.log(req.session.user,'jhgh use')
         res.redirect("/")
     } catch (error) {
         console.error("login error",error);
