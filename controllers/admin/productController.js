@@ -39,7 +39,7 @@ const addProducts = async (req, res) => {
                     const resizedFilename = `resized-${Date.now()}-${req.files[i].filename}`;
                     const resizedImagePath = path.join(uploadDir, resizedFilename);
                     await sharp(originalImagePath)
-                        .resize({ width: 440, height: 440 })
+                        .resize({ width: 440, height: 1000})
                         .toFile(resizedImagePath);
                     images.push(resizedFilename);
                 }
@@ -173,18 +173,18 @@ const removeProductOffer = async (req, res) => {
 const listProduct = async (req,res)=>{
     try {
       const productId = req.query.id;
-      const productUpdate = await Product.findByIdAndUpdate({_id:productId},{isListed:true})
+      const productUpdate = await Product.findByIdAndUpdate({_id:productId},{isListed:true},{new:true})
       return res.redirect('/admin/products')
- 
+      
     } catch (error) {
-          console.error("Error fetching listing product info:", error);
-         res.status(500).send("An error occurred while listing product data.");
+        console.error("Error fetching listing product info:", error);
+        res.status(500).send("An error occurred while listing product data.");
     }
- }
- const unlistProduct = async (req,res)=>{
-     try {
-       const productId = req.query.id;
-       const productUpdate = await Product.findByIdAndUpdate({_id:productId},{isListed:false})
+}
+const unlistProduct = async (req,res)=>{
+    try {
+        const productId = req.query.id;
+        const productUpdate = await Product.findByIdAndUpdate({_id:productId},{isListed:false},{new:true})  
        return res.redirect('/admin/products')
   
      } catch (error) {

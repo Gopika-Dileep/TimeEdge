@@ -61,7 +61,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <%for(let i=data.length-1;i>=0;i--) { %>
+                    <% for(let i=data.length-1;i>=0;i--) { %>
                         <tr>
                             <td>
                                 <% if (data[i].productImage && data[i].productImage.length> 0) { %>
@@ -69,7 +69,7 @@
                                         style="width: 100px; height: 100px; object-fit: cover;">
                                     <% } else { %>
                                         <span>No Image</span>
-                                        <% } %>
+                                <% } %>
                             </td>
                             <td>
                                 <%=data[i].productName %>
@@ -88,22 +88,22 @@
                                 <%=data[i].salePrice%>
                             </td>
                             <td>
-                                <%=data[i]. productOffer%>
+                                <%=data[i].productOffer%>
                             </td>
                             <td>
-                                <%=data[i]. quantity%>
+                                <%=data[i].quantity%>
                             </td>
 
                             <td>
                                 <%if(data[i].isListed===false) { %>
-                                    <button class="btn btn-danger" style="width: 80px;">
-                                        <a href="/admin/listProduct?id=<%=data[i]._id %>" class="text-white"
-                                            style="text-decoration: none;">Unlist</a>
+                                    <button class="btn btn-success" style="width: 80px;">
+                                    <a href="/admin/listProduct?id=<%=data[i]._id %>" class="text-white"
+                                        style="text-decoration: none;">List</a>
                                     </button>
                                     <% } else { %>
-                                        <button class="btn btn-success" style="width: 80px;">
-                                            <a href="/admin/unlistProduct?id=<%=data[i]._id %>" class="text-white"
-                                                style="text-decoration: none;">List</a>
+                                                <button class="btn btn-danger" style="width: 80px;">
+                                                <a href="/admin/unlistProduct?id=<%=data[i]._id %>" class="text-white"
+                                                    style="text-decoration: none;">Unlist</a>
                                         </button>
                                         <% } %>
 

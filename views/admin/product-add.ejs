@@ -325,18 +325,20 @@ function handleFileSelect(event) {
               if (name.trim() === "") {
       displayErrorMessage('productName-error', 'Please enter a product name.');
       isValid = false;
-   } else if (!/^[a-zA-Z\s]+$/.test(name.trim())) {
-      displayErrorMessage('productName-error', 'Product name should contain only alphabetic characters.');
-      isValid = false;
-   }
+    } else if (!/^[a-zA-Z\s;,.]+$/.test(name.trim())) {
+    displayErrorMessage('productName-error', 'Product name can only contain letters, spaces, and the following characters: ; , .');
+    isValid = false;
+}
+
             
    if (description.trim() === "") {
       displayErrorMessage('description-error', 'Please enter a product description.');
       isValid = false;
-   } else if (!/^[a-zA-Z\s]+$/.test(description.trim())) {
-      displayErrorMessage('description-error', 'Product description should contain only alphabetic characters.');
-      isValid = false;
+    } else if (!/^[a-zA-Z0-9\s;:"._-]+$/.test(description.trim())) {
+    displayErrorMessage('description-error', 'Product description can only contain letters, numbers, spaces, and the following characters: ; : " . _ -');
+    isValid = false;
    }
+
   
               if ( parseInt(quantity) < 0) {
                   displayErrorMessage('quantity-error', 'Please enter a valid non-negative quantity.');
@@ -346,23 +348,45 @@ function handleFileSelect(event) {
   
   
   
-              if (!/^\d+(\.\d{1,2})?$/.test(price) || parseFloat(price) < 0) {
-                  displayErrorMessage('regularPrice-error', 'Please enter a valid non-negative price.');
-                  isValid = false;
-              }
+            // Sanitize the price input to remove unwanted spaces or formatting issues
+const sanitizedPrice = price.trim().replace(/,/g, ''); // Removes spaces and commas, if any
+
+if (
+    !/^\d{4,6}(\.\d{1,2})?$/.test(sanitizedPrice) || // Validates numbers with 4-6 digits before the decimal
+    parseFloat(sanitizedPrice) < 1000 ||             // Ensures price is at least 1000
+    parseFloat(sanitizedPrice) > 100000              // Ensures price is at most 100000
+) {
+    displayErrorMessage(
+        'regularPrice-error',
+        'Please enter a valid price between 1000 and 100000. Example: 1500 or 1500.99'
+    );
+    isValid = false;
+}
+
   
   
   
-  
-              if (!/^\d+(\.\d{1,2})?$/.test(saleprice) || parseFloat(saleprice) < 0) {
-                  displayErrorMessage('salePrice-error', 'Please enter a valid non-negative price.');
-                  isValid = false;
-              }
-              if (parseFloat(price) <= parseFloat(saleprice)) {
-      displayErrorMessage('regularPrice-error', 'Regular price must be greater than sale price.');
-      isValid = false;
-   }
-  
+              // Sanitize the sale price input to remove unwanted spaces or formatting issues
+const sanitizedSalePrice = saleprice.trim().replace(/,/g, ''); // Removes spaces and commas, if any
+
+if (
+    !/^\d{4,6}(\.\d{1,2})?$/.test(sanitizedSalePrice) || // Validates numbers with 4-6 digits before the decimal
+    parseFloat(sanitizedSalePrice) < 1000 ||             // Ensures sale price is at least 1000
+    parseFloat(sanitizedSalePrice) > 100000              // Ensures sale price is at most 100000
+) {
+    displayErrorMessage(
+        'salePrice-error',
+        `Please enter a valid sale price between 1,000 and 100,000. You entered: ${saleprice}`
+    );
+    isValid = false;
+}
+
+
+            if (parseFloat(price) <= parseFloat(saleprice)) {
+                displayErrorMessage('regularPrice-error', `Regular price (${price}) must be greater than sale price (${saleprice}).`);
+                isValid = false;
+            }
+
   
               if (color.trim() === "") {
                   displayErrorMessage('color-error', 'Please enter a color.');
