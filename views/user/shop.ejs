@@ -202,12 +202,18 @@
                         <% for (let i = 0; i < products.length; i++) { %>
                             <div class="col-lg-4 col-md-6 col-sm-6">
                                 <div class="product__item">
-                                    <a href="/productDetails?id=<%=products[i]._id%>">
-                                    <div class="product__item__pic set-bg" data-setbg="/uploads/productImages/<%= products[i].productImage[0] %>" >
-                                        <ul class="product__hover">
-                                            <li><a href="#"><img src="img/icon/heart.png" alt=""><span>Whishlist</span></a></li>
-                                        </ul>
-                                    </div>
+                                    <a href="/productDetails?id=<%= products[i]._id %>">
+                                        <div class="product__item__pic set-bg" data-setbg="/uploads/productImages/<%= products[i].productImage[0] %>">
+                                            <ul class="product__hover">
+                                                <li>
+                                                    
+                                                    <img src="img/icon/heart.png" alt=""><span>Wishlist</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </a>
+                                    
+                                    </a>
                                     <div class="product__item__text">
                                         <h6><%= products[i].productName %></h6>
                                         <a href="#" class="add-cart">+ Add To Cart</a>

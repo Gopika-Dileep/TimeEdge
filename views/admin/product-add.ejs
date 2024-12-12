@@ -181,6 +181,7 @@
    </section>
 
 
+   <script src="https://cdn.jsdelivr.net/npm/cropperjs/dist/cropper.min.js"></script>
    <script>
 
 // function validateAndSubmit() {
@@ -192,8 +193,8 @@
 function viewImage1(event) {
         document.getElementById("imgView1").src = URL.createObjectURL(event.target.files[0])
     }
-
     function viewImage2(event) {
+
         document.getElementById("imgView2").src = URL.createObjectURL(event.target.files[0])
     }
 
@@ -213,14 +214,23 @@ function viewImage1(event) {
             const image = document.getElementById("imgView" + index);
             image.src = dataURL;
 
-            // Initialize Cropper
-            const cropper = new Cropper(image, {
-                aspectRatio: 1,
-                viewMode: 1,
+            if (image.cropperInstance) {
+                image.cropperInstance.destroy();
+            }
+
+            image.cropperInstance = new Cropper(image, {
+                aspectRatio: NaN,
+                viewMode: 1, 
+                dragMode: 'move',
                 guides: true,
-                background: false,
-                autoCropArea: 1,
+                background: true, 
+                autoCropArea: 0.8, 
                 zoomable: true,
+                scalable: true,
+                movable: true,
+                rotatable: true,
+                minContainerWidth: 300, 
+                minContainerHeight: 300,
             });
 
             const cropperContainer = document.querySelector("#croppedImg" + index).parentNode;
@@ -230,7 +240,7 @@ function viewImage1(event) {
             saveButton.addEventListener(
                 "click",
                 function saveHandler() {
-                    const croppedCanvas = cropper.getCroppedCanvas();
+                    const croppedCanvas = image.cropperInstance.getCroppedCanvas();
                     if (!croppedCanvas) {
                         alert("Error: Could not crop the image. Try again.");
                         return;
@@ -248,7 +258,6 @@ function viewImage1(event) {
                             return;
                         }
 
-                        // Update the file input
                         const fileInput = document.getElementById("input" + index);
                         const file = new File([blob], fileName, { type: "image/png" });
 
@@ -258,16 +267,14 @@ function viewImage1(event) {
                         fileInput.files = dataTransfer.files;
 
                         console.log(`Cropped image saved as: ${fileName}`);
-                       
 
-                        // Cleanup
                         cropperContainer.style.display = "none";
-                        cropper.destroy();
+                        image.cropperInstance.destroy();
+                        delete image.cropperInstance;
                     }, "image/png");
                 },
-                { once: true } // Ensure the handler is only attached once
+                { once: true }
             );
-            
         };
         reader.readAsDataURL(input.files[0]);
     }
@@ -421,6 +428,5 @@ if (
 
    </script>
    
-<script src="https://cdn.jsdelivr.net/npm/cropperjs/dist/cropper.min.js"></script>
      
 <%- include("../../views/partials/admin/footer") %>

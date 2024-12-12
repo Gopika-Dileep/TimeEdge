@@ -49,13 +49,21 @@ router.get("/products",adminAuth,productController.getAllProducts);
 router.post("/addProductOffer",adminAuth,productController.addProductOffer);
 router.post("/removeProductOffer",adminAuth,productController.removeProductOffer);
 
+router.post("/editProduct/:id",adminAuth,productController.updateproduct);
+
+
 router.get("/listProduct",adminAuth,productController.listProduct);
 router.get("/unlistProduct",adminAuth,productController.unlistProduct);
 
 router.get("/editProduct",adminAuth,productController.getEditProduct)
 
 router.post("/editProduct/:id",adminAuth,upload.array("images",4),productController.editProduct);
-router.post("/deleteImages",adminAuth,productController.deleteSingleImage)
+router.post('/deleteImage', (req, res, next) => {
+    console.log("Delete Image API hit");
+    next();
+}, adminAuth, productController.deleteSingleImage);
+
+
 router.get("/banner",adminAuth,bannerController.getBannerPage);
 router.get("/addBanner",adminAuth,bannerController.getAddBannerPage)
 router.post("/addBanner",adminAuth,upload.single("images"),bannerController.addBanner)
