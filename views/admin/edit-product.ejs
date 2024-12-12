@@ -18,7 +18,7 @@
 
 
                     <div class="card-body">
-                        <form method="post" action="/admin/editProduct/<%=product._id%>" enctype=""
+                        <form method="post" action="/admin/editProduct/<%=product._id%>" enctype="multipart/form-data"
                             onsubmit="return validationForm()">
                             <div class="mb-4">
                                 <label for="product_name" class="form-label">Product Name</label>
@@ -49,7 +49,7 @@
                                 <div class="col-lg-4">
                                     <div class="mb-4">
                                         <label class="form-label">Regular price</label>
-                                        <input placeholder="$" name="regularPrice" type="text"
+                                        <input placeholder="$" name="regularPrice" type="number"
                                             value="<%=product.regularPrice%>" class="form-control border">
                                         <div id="regularPrice-error" class="error-message"></div>
                                     </div>
@@ -57,11 +57,11 @@
                                 <div class="col-lg-4">
                                     <div class="mb-4">
                                         <label class="form-label">Sale price</label>
-                                        <input name="salePrice" type="text" value="<%=product.salePrice%>"
-                                            class="form-control border">
+                                        <input name="salePrice" type="number" value="<%= product.salePrice %>" class="form-control border" required>
                                     </div>
                                     <div id="salePrice-error" class="error-message"></div>
                                 </div>
+                                
                                 <div class="col-lg-4">
                                     <div class="mb-4">
                                         <label class="form-label">Quantity</label>

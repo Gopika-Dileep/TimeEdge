@@ -45,4 +45,4 @@ router.post("/reset-password",profileController.postNewPassword)
 router.get("/productDetails",productController.productDetails);
 
 
-module.exports = router;
+module.exports = router; 

@@ -49,7 +49,7 @@ router.get("/products",adminAuth,productController.getAllProducts);
 router.post("/addProductOffer",adminAuth,productController.addProductOffer);
 router.post("/removeProductOffer",adminAuth,productController.removeProductOffer);
 
-router.post("/editProduct/:id",adminAuth,productController.updateproduct);
+router.post("/editProduct/:id",adminAuth,upload.array("images",4),productController.updateproduct);
 
 
 router.get("/listProduct",adminAuth,productController.listProduct);
