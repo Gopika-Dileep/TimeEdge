@@ -21,7 +21,7 @@ app.use (express.urlencoded({extended:true}));
 
 app.use(session({
     secret:process.env.SESSION_SECRET,
-    ressave:false,
+    resave:false,
     saveUninitialized:true,
     cookie:{
         secure:false,
@@ -33,8 +33,8 @@ app.use(session({
 app.use(async (req, res, next) => {
     try {
         if (req.session.user) {
-            const user = await User.findById(req.session.user).select('name email'); // Fetch user details
-            res.locals.user = user; // Make user details available in templates
+            const user = await User.findById(req.session.user).select('name email');
+            res.locals.user = user; 
         } else {
             res.locals.user = null;
         }

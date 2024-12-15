@@ -19,7 +19,7 @@
 </style>
 
 <div class="dashboard-wrapper">
-    <!-- Overview Section -->
+  
     <div class="overview-grid">
         <div class="overview-card">
             <div class="overview-header">
@@ -49,9 +49,9 @@
         </div>
     </div>
 
-    <!-- Main Content Grid -->
+   
     <div class="main-grid">
-        <!-- Orders Table Section -->
+      
         <div class="orders-section">
             <div class="section-header">
                 <h2>Recent Orders</h2>
@@ -97,7 +97,7 @@
             </div>
         </div>
 
-        <!-- Best Selling Section -->
+ 
         <div class="best-selling-section">
             <div class="section-header">
                 <h2>Best Selling</h2>
@@ -297,7 +297,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
-    // Sales Chart
+
     new ApexCharts(document.querySelector("#salesChart"), {
         chart: {
             type: 'bar',
@@ -315,7 +315,6 @@
         tooltip: { enabled: false }
     }).render();
 
-    // Customers Chart
     new ApexCharts(document.querySelector("#customersChart"), {
         chart: {
             type: 'line',
@@ -334,7 +333,7 @@
         tooltip: { enabled: false }
     }).render();
 
-    // Orders Chart
+   
     new ApexCharts(document.querySelector("#ordersChart"), {
         chart: {
             type: 'line',
@@ -353,7 +352,6 @@
         tooltip: { enabled: false }
     }).render();
 
-    // Best Selling Chart
     new ApexCharts(document.querySelector("#bestSellingChart"), {
         chart: {
             type: 'donut',

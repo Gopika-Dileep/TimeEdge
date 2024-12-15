@@ -1,4 +1,4 @@
-/* General Layout */
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -21,7 +21,6 @@
     padding: 15px;
 }
 
-/* Breadcrumb Styling */
 .breadcrumb-wrap {
     background-color: #f8f9fa;
     padding: 10px 15px;
@@ -39,7 +38,7 @@
     color: #6c757d;
 }
 
-/* Product Details */
+
 .product-detail {
     background: #fff;
     border-radius: 10px;
@@ -81,7 +80,6 @@
     color: #28a745;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .col-md-6 {
         flex: 0 0 100%;

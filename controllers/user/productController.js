@@ -45,7 +45,7 @@ const productDetails = async (req, res) => {
         const productOffer = product.productOffer || 0;
         const totalOffer = categoryOffer + productOffer;
 
-        // Find related products based on category
+  
         const relatedProducts = await Product.find({
             category: findCategory._id,
             _id: { $ne: productId }

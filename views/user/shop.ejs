@@ -1,6 +1,6 @@
 
 <%-include("../../views/partials/user/header") %>
-    <!-- Breadcrumb Section Begin -->
+  
     <section class="breadcrumb-option">
         <div class="container">
             <div class="row">
@@ -16,9 +16,9 @@
             </div>
         </div>
     </section>
-    <!-- Breadcrumb Section End -->
+   
 
-    <!-- Shop Section Begin -->
+  
     <section class="shop spad">
         <div class="container">
             <div class="row">
@@ -183,7 +183,7 @@
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <div class="shop__product__option__left">
-                                    <!-- <p>Showing 1–12 of 126 results</p> -->
+                              
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6">
@@ -222,7 +222,7 @@
                                                 <i class="fa <%= j < products[i].rating ? 'fa-star' : 'fa-star-o' %>"></i>
                                             <% } %>
                                         </div>
-                                        <p>$<%= products[i].salePrice%><span class='text-muted'><strike><%= products[i].regularPrice%></strike></span></p>
+                                        <p>₹<%= products[i].salePrice%><span class='text-muted'><strike><%= products[i].regularPrice%></strike></span></p>
                                         <div class="product__color__select">
                                             <% if (products[i].color) { %>
                                                 <label class="<%= products[i].color %>" for="pc-<%= i %>">
@@ -262,6 +262,6 @@
             </div>
         </div>
     </section>
-    <!-- Shop Section End -->
+   
     <%-include("../../views/partials/user/footer") %>
     

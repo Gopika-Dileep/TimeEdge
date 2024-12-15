@@ -31,7 +31,7 @@
     <div class="card">
         <div class="card-body">
             <div class="row">
-                <!-- Add Brand Form -->
+             
                 <div class="col-md-3">
                     <form method="POST" action="/admin/addBrand" enctype="multipart/form-data">
                         <div class="mb-4">
@@ -62,7 +62,7 @@
                     </form>
                 </div>
 
-                <!-- Brand List Table -->
+              
                 <div class="col-md-7 offset-md-1">
                     <div class="table-responsive">
                         <table class="table table-hover">
@@ -119,7 +119,7 @@
                                             <!-- Delete Button -->
                                             <!-- <form 
                                                 method="POST" 
-                                                action="/admin/deleteBrand/<%= brand._id %>" 
+                                                action="/admin/deleteBrand/" 
                                                 style="display: inline;"
                                             >
                                                 <button 
@@ -141,7 +141,7 @@
         </div>
     </div>
 
-    <!-- Pagination -->
+
     <div class="pagination-container text-center mt-4">
         <% if (currentPage > 1) { %>
             <a href="?page=<%= currentPage - 1 %>">&laquo; Previous</a>

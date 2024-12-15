@@ -17,7 +17,7 @@ const userAuth = (req,res,next)=>{
             res.status(500).send("internal server error")
         })
     }else{
-        res.redirct("/login")
+        res.redirect("/login")
     }
 }
 

@@ -170,7 +170,7 @@ async function addOffer(productId) {
         inputPlaceholder: '%',
     });
 
-    if (amount !== null) { // Check if a value was provided
+    if (amount !== null) { 
         $.ajax({
             url: "/admin/addProductOffer",
             method: "POST",
@@ -179,7 +179,7 @@ async function addOffer(productId) {
                 productId: productId,
             },
             success: (response) => {
-                if (response.status === true) { // Use 'response' instead of 'responsive'
+                if (response.status === true) {
                     Swal.fire('Offer added', 'The offer has been added successfully', 'success').then(() => {
                         location.reload();
                     });
@@ -206,7 +206,7 @@ function removeOffer(productId){
             confirmButtonColor:'#3085d6',
             cancelButtonColor:'d33',
             confirmButtonText:'Yes,remove it!',
-            // timer:5000,
+           
             timerProgressBar:true
         }).then(async (result)=>{
             if(result.isConfirmed){

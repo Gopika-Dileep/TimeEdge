@@ -47,7 +47,6 @@ const loadHomepage = async (req, res) => {
 
     } catch (error) {
         return res.render("home");
-        res.status(500).send("server error")
     }
 }
 
@@ -153,7 +152,7 @@ const verifyOtp = async (req, res) => {
 
         const hashedPassword = await securepassword(userData.password);
 
-        // Create new user
+     
         const newUser = new User({
             name: userData.name,
             email: userData.email,
@@ -163,7 +162,7 @@ const verifyOtp = async (req, res) => {
 
         await newUser.save();
 
-        // Clear session data
+   
         delete req.session.userData;
 
         return res.redirect("/login");
@@ -184,7 +183,7 @@ const verifyOtp = async (req, res) => {
 const loadVerifyOtp = async (req, res) => {
     try {
         if (!req.session.userData) {
-            return res.redirect("/signup"); // Redirect if userData is not present in session
+            return res.redirect("/signup"); 
         }
 
         res.render("verifyotp", { email: req.session.userData.email });

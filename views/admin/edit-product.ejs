@@ -357,12 +357,12 @@
             const image = document.getElementById(`imgView${index}`);
             image.src = dataURL;
 
-            // Destroy any existing Cropper instance before creating a new one
+         
             if (image.cropperInstance) {
                 image.cropperInstance.destroy();
             }
 
-            // Initialize the Cropper instance
+           
             image.cropperInstance = new Cropper(image, {
                 aspectRatio: NaN,
                 viewMode: 1,
@@ -378,11 +378,10 @@
                 minContainerHeight: 300,
             });
 
-            // Display the cropper container
+        
             const cropperContainer = document.querySelector(`#croppedImg${index}`).parentNode;
             cropperContainer.style.display = "block";
 
-            // Add an event listener to the save button
             const saveButton = document.querySelector(`#saveButton${index}`);
             saveButton.addEventListener(
                 "click",
@@ -393,11 +392,11 @@
                         return;
                     }
 
-                    // Set the cropped image in the target element
+                    
                     const croppedImage = document.getElementById(`croppedImg${index}`);
                     croppedImage.src = croppedCanvas.toDataURL("image/jpeg", 1.0);
 
-                    // Create a file for the cropped image
+              
                     const timestamp = new Date().getTime();
                     const fileName = `cropped-img-${timestamp}-${index}.png`;
 
@@ -407,7 +406,7 @@
                             return;
                         }
 
-                        // Update the input field with the new cropped file
+                   
                         const fileInput = document.getElementById(`input${index}`);
                         const file = new File([blob], fileName, { type: "image/png" });
 
@@ -417,13 +416,13 @@
 
                         console.log(`Cropped image saved as: ${fileName}`);
 
-                        // Hide the cropper container and destroy the instance
+                     
                         cropperContainer.style.display = "none";
                         image.cropperInstance.destroy();
                         delete image.cropperInstance;
                     }, "image/png");
                 },
-                { once: true } // Ensure the handler is added only once
+                { once: true } 
             );
         };
         reader.readAsDataURL(input.files[0]);

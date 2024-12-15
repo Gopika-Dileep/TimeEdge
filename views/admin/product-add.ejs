@@ -261,7 +261,6 @@ function viewImage1(event) {
                         const fileInput = document.getElementById("input" + index);
                         const file = new File([blob], fileName, { type: "image/png" });
 
-                        // Create a DataTransfer object and update the input
                         const dataTransfer = new DataTransfer();
                         dataTransfer.items.add(file);
                         fileInput.files = dataTransfer.files;
@@ -355,13 +354,13 @@ function handleFileSelect(event) {
   
   
   
-            // Sanitize the price input to remove unwanted spaces or formatting issues
-const sanitizedPrice = price.trim().replace(/,/g, ''); // Removes spaces and commas, if any
+         
+const sanitizedPrice = price.trim().replace(/,/g, '');
 
 if (
-    !/^\d{4,6}(\.\d{1,2})?$/.test(sanitizedPrice) || // Validates numbers with 4-6 digits before the decimal
-    parseFloat(sanitizedPrice) < 1000 ||             // Ensures price is at least 1000
-    parseFloat(sanitizedPrice) > 100000              // Ensures price is at most 100000
+    !/^\d{4,6}(\.\d{1,2})?$/.test(sanitizedPrice) || 
+    parseFloat(sanitizedPrice) < 1000 ||             
+    parseFloat(sanitizedPrice) > 100000              
 ) {
     displayErrorMessage(
         'regularPrice-error',
@@ -373,13 +372,12 @@ if (
   
   
   
-              // Sanitize the sale price input to remove unwanted spaces or formatting issues
-const sanitizedSalePrice = saleprice.trim().replace(/,/g, ''); // Removes spaces and commas, if any
+const sanitizedSalePrice = saleprice.trim().replace(/,/g, '');
 
 if (
-    !/^\d{4,6}(\.\d{1,2})?$/.test(sanitizedSalePrice) || // Validates numbers with 4-6 digits before the decimal
-    parseFloat(sanitizedSalePrice) < 1000 ||             // Ensures sale price is at least 1000
-    parseFloat(sanitizedSalePrice) > 100000              // Ensures sale price is at most 100000
+    !/^\d{4,6}(\.\d{1,2})?$/.test(sanitizedSalePrice) || 
+    parseFloat(sanitizedSalePrice) < 1000 ||             
+    parseFloat(sanitizedSalePrice) > 100000              
 ) {
     displayErrorMessage(
         'salePrice-error',
