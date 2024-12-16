@@ -49,8 +49,13 @@ router.post("/verify-email-otp",userAuth,profileController.verifyEmailOtp);
 router.post("/update-email",userAuth,profileController.updateEmail);
 router.get('/change-password',userAuth,profileController.changePassword)
 router.post("/change-password",userAuth,profileController.changePasswordValid);
-router.post("/verify-changepassword-otp",userAuth,profileController.verifychangePasswordOtp)
+router.post("/verify-changepassword-otp",userAuth,profileController.verifychangePasswordOtp);
 
+router.get("/addAddress",userAuth,profileController.addAddress);
+router.post("/addAddress",userAuth,profileController.postAddAddress);
+router.get("/editAddress",userAuth,profileController.editAddress);
+router.post("/editAddress",userAuth,profileController.postEditAddress)
+router.get("/deleteAddress",userAuth,profileController.deleteAddress)
 
 
 router.get("/productDetails",productController.productDetails);

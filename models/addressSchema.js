@@ -9,11 +9,11 @@ const addressSchema= new Schema({
     },
     address:[{
          addressType:{
-            type:string,
+            type:String,
             required:true
          },
          name:{
-            type:string,
+            type:String,
             required:true,
          },
          city:{
@@ -33,7 +33,7 @@ const addressSchema= new Schema({
             required:true
          },
          phone:{
-            typq:String,
+            type:String,
             required:true
          },
          altPhone:{
@@ -47,6 +47,6 @@ const addressSchema= new Schema({
 
 
 
-const Address = mongoose.model("Address,addressSchema");
+const Address = mongoose.model("Address",addressSchema);
 
-module.exports = address;
+module.exports = Address;
