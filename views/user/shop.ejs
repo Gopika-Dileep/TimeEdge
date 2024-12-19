@@ -49,6 +49,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                    
                                 <div class="card">
                                     <div class="card-heading">
                                         <a data-toggle="collapse" data-target="#collapseTwo">Branding</a>
@@ -67,13 +68,28 @@
                                 </div>
                                 <div class="card">
                                     <div class="card-heading">
+                                        <a data-toggle="collapse" data-target="#collapseThree">Sort By Price</a>
+                                    </div>
+                                    <div id="collapseThree" class="collapse show" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="shop__sidebar__price">
+                                                <ul>
+                                                    <li><a href="/filterPriceRange?sort=asc">Low to High</a></li>
+                                                    <li><a href="/filterPriceRange?sort=desc">High to Low</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-heading">
                                         <a data-toggle="collapse" data-target="#collapseThree">Filter Price</a>
                                     </div>
                                     <div id="collapseThree" class="collapse show" data-parent="#accordionExample">
                                         <div class="card-body">
                                             <div class="shop__sidebar__price">
                                                 <ul>
-                                                    <li><a href="/filterPrice?gt=0&lt=500">1000 - 3000</a></li>
+                                                    <li><a href="/filterPrice?gt=1000&lt=3000">1000 - 3000</a></li>
                                                     <li><a href="/filterPrice?gt=3000&lt=5000">3000 - 5000</a></li>
                                                     <li><a href="/filterPrice?gt=5000&lt=10000">5000 - 10000</a></li>
                                                     <li><a href="/filterPrice?gt=10000&lt=20000">10000 - 20000</a></li>
@@ -186,16 +202,7 @@
                               
                                 </div>
                             </div>
-                            <div class="col-lg-6 col-md-6 col-sm-6">
-                                <div class="shop__product__option__right">
-                                    <p>Sort by Price:</p>
-                                    <select>
-                                        <option value="">Low To High</option>
-                                        <option value="">$0 - $55</option>
-                                        <option value="">$55 - $100</option>
-                                    </select>
-                                </div>
-                            </div>
+                           
                         </div>
                     </div>
                     <div class="row">
@@ -216,7 +223,9 @@
                                     </a>
                                     <div class="product__item__text">
                                         <h6><%= products[i].productName %></h6>
-                                        <a href="#" class="add-cart">+ Add To Cart</a>
+                                        <a href="#" class="add-cart" data-product-id="<%= products[i]._id %>"  data-quantity="1" data-price="<%= products[i].salePrice %>">
+                                            + Add To Cart
+                                          </a>
                                         <div class="rating">
                                             <% for (let j = 0; j < 5; j++) { %>
                                                 <i class="fa <%= j < products[i].rating ? 'fa-star' : 'fa-star-o' %>"></i>
@@ -262,6 +271,58 @@
             </div>
         </div>
     </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
    
+    <script>
+
+        
+        document.querySelectorAll('.set-bg').forEach(function (element) {
+            const bg = element.getAttribute('data-setbg');
+            if (bg) {
+                element.style.backgroundImage = `url('${bg}')`;
+            }
+        });
+
+        $(document).ready(function() {
+  $('.add-cart').on('click', function(event) {
+
+          
+    $('.sortByPrice').on('change', function () {
+            const selectedValue = this.value;
+            if (selectedValue) {
+                window.location.href = selectedValue;
+            }
+        });
+        
+    event.preventDefault();
+
+    alert('hlo')
+
+    const productId = $(this).data('product-id');
+    const quantity = $(this).data('quantity');
+    const price = $(this).data('price');
+
+    $.ajax({
+      url: '/addToCart',  
+      type: 'POST',  
+      contentType: 'application/json', 
+      data: JSON.stringify({ productId, quantity, price }), 
+      success: function(response) {
+       
+        alert('Item added to cart!');
+        window.location.href = '/cart';  
+      },
+      error: function(error) {
+   
+        console.log('Error:', error);
+        alert('There was an error adding the item to the cart');
+      }
+    });
+  });
+});
+    
+    </script>
     <%-include("../../views/partials/user/footer") %>
     

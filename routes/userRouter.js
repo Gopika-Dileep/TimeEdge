@@ -33,6 +33,10 @@ router.get(
   router.get("/shop",userController.loadShoppingPage);
   router.get('/filter',userController.filterProduct)
   router.get ('/filterPrice',userController.filterByPrice);
+  router.get('/filterPriceRange',userController.filterByPriceRange)
+
+
+
 
 
 router.get("/forgot-password",profileController.getForgotPassPage)
@@ -41,6 +45,9 @@ router.post("/verify-passForgot-otp",profileController.verifyForgotPassOtp)
 router.get("/reset-password",profileController.getResetPassPage)
 router.post("/resend-forgot-otp",profileController.resendOtp);
 router.post("/reset-password",profileController.postNewPassword);
+
+
+
 
 router.get("/profile",userAuth,profileController.userProfile);
 router.get('/change-email',userAuth,profileController.changeEmail)
@@ -51,11 +58,21 @@ router.get('/change-password',userAuth,profileController.changePassword)
 router.post("/change-password",userAuth,profileController.changePasswordValid);
 router.post("/verify-changepassword-otp",userAuth,profileController.verifychangePasswordOtp);
 
+
+
+
 router.get("/addAddress",userAuth,profileController.addAddress);
 router.post("/addAddress",userAuth,profileController.postAddAddress);
 router.get("/editAddress",userAuth,profileController.editAddress);
 router.post("/editAddress",userAuth,profileController.postEditAddress)
 router.get("/deleteAddress",userAuth,profileController.deleteAddress)
+
+
+router.get("/cart",userAuth,userController.addToCart);
+router.post("/addToCart",userAuth,userController.postAddToCart);
+router.post('/increment',userAuth,userController.incrementQuantity); 
+router.post('/decrement',userAuth,userController.decrementQuantity); 
+router.post('/remove',userAuth,userController.removeItem); 
 
 
 router.get("/productDetails",productController.productDetails);

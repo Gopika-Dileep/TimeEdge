@@ -54,6 +54,10 @@ const productSchema = new Schema({
         required:true,
         default:"Available",
     },
+    maxQtyPerPerson: {
+        type: Number,
+        default: 5,
+    },
 
 },{timestamps:true});
 
