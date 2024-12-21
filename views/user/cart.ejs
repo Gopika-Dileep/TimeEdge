@@ -172,7 +172,8 @@
                     <div class="total-price">
                         <h3>Total: ₹<%= totalPrice %></h3>
                     </div>
-                    <button class="btn-checkout">Proceed to Checkout</button>
+                    <button id="btn-checkout" class="btn-checkout">Proceed to Checkout</button>
+
                 </div>
             <% } else { %>
                 <div class="empty-cart">
@@ -260,6 +261,22 @@ function removeItem(itemId) {
         }
     });
 }
+$(document).ready(function () {
+    $('#btn-checkout').on('click', function () {
+      $.ajax({
+        url: '/checkout', 
+        type: 'GET',
+        success: function (response) {
+            window.location.href = '/checkout';
+          console.log('Checkout successful:', response);
+        },
+        error: function (xhr, status, error) {
+          console.error('Error during checkout:', status, error);
+         
+        },
+      });
+    });
+  });
 
     </script>
 </body>

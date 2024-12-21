@@ -72,13 +72,13 @@ const addCategory = async (req, res) => {
         const existingCategory = await Category.findOne({ name });
         if (existingCategory) {
             // return res.status(400).json({ error: "Category already exists" });
-            return res.redirect('/category')
+            return res.redirect('/admin/category')
 
         }
 
         const newCategory = new Category({ name, description });
         await newCategory.save();
-        console.log(newCategory,"fffff");
+        
         // res.json({ message: "Category added successfully" });
         return res.redirect('/admin/category')
     } catch (error) {

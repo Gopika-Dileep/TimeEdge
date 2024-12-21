@@ -1,17 +1,11 @@
-const mongoose = require ("mongooe");
+const mongoose = require ("mongoose");
 const { Types } = require("mongoose");
 const {Schema} = mongoose;
-const {v4:uuidv4}= require('uuid');
 
 const orderSchema = new Schema({
-    orderId:{
-        type:string,
-        default:()=>uuidv4(),
-        unique:true
-    },
     orderedItems:[{
         products:{
-            type:Schema>Types.ObjectId,
+            type:Schema.Types.ObjectId,
             ref:"Product",
             required:true
         },
@@ -23,15 +17,16 @@ const orderSchema = new Schema({
             type:Number,
             default:0
         }
-    }],
-    totalPrice:{
-        type:Number,
-        required:true
-    },
-    discount:{
-        type:Number,
-        default:0
-    },
+        }],
+        // totalPrice:{
+        //     type:Number,
+        //     required:true
+        // },
+
+        // discount:{
+        //     type:Number,
+        //     default:0
+        // },
     finalAmount:{
         type:Number,
         required:true
@@ -57,6 +52,9 @@ const orderSchema = new Schema({
     coupenApplied:{
         type:Boolean,
         default:false
+    },
+    paymentMethod:{
+        type:String,
     }
 })
 

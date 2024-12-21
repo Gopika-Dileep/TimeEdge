@@ -332,13 +332,14 @@ const postAddAddress = async (req,res)=>{
 
 const editAddress = async (req,res)=>{
     try {
-        
         const addressId = req.query.id;
+        console.log( addressId,'type of address')
         const user = req.session.user;
         const currAddress = await Address.findOne({
             "address._id": addressId,
-
+            
         })
+        console.log(currAddress,'id fgdf')
         if(!currAddress){
             return res.redirect("/pageNotFound")
         }
@@ -356,6 +357,46 @@ const editAddress = async (req,res)=>{
         res.redirect("/pageNotFound")
     }
 }
+const mongoose = require('mongoose');
+
+// const editAddress = async (req, res) => {
+//     try {
+//         const addressId = req.query.id;
+//         if (!addressId) {
+//             return res.redirect("/pageNotFound");
+//         }
+        
+//         const user = req.session.user;
+        
+//         // Convert addressId to ObjectId if needed
+//         const objectId = new mongoose.Types.ObjectId(addressId);
+//         console.log('objectId',objectId)
+        
+//         // Find the document containing the address
+//         const currAddress = await Address.findOne({
+//             "addresses._id": objectId,
+//         });
+        
+//         console.log('addres',currAddress)
+//         if (!currAddress || !Array.isArray(currAddress.address)) {
+//             return res.redirect("/pageNotFound");
+//         }
+
+//         // Find the specific address by ID
+//         const addressData = currAddress.addresses.find((item) => {
+//             return item._id.toString() === addressId.toString();
+//         });
+
+//         if (!addressData) {
+//             return res.redirect('/pageNotFound');
+//         }
+
+//         res.render("edit-address", { address: addressData, user: user });
+//     } catch (error) {
+//         console.error("Error in edit address", error);
+//         res.redirect("/pageNotFound");
+//     }
+// };
 
 const postEditAddress = async (req,res)=>{
     try {

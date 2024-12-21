@@ -75,7 +75,14 @@ router.post('/decrement',userAuth,userController.decrementQuantity);
 router.post('/remove',userAuth,userController.removeItem); 
 
 
-router.get("/productDetails",productController.productDetails);
+router.get('/checkout',userAuth,userController.getCheckoutPage);
+router.get('/order-confirmation',userAuth,userController.getOrderConfirmationPage);
+
+
+router.get("/productDetails",userAuth,productController.productDetails);
+
+router.post('/create-order',userAuth,userController.createOrder); 
+
 
 
 module.exports = router; 

@@ -4,6 +4,8 @@ const Product = require("../../models/productSchema");
 const Brand = require("../../models/brandSchema");
 const Banner = require("../../models/bannerSchema");
 const Cart = require('../../models/cartSchema');
+const Address = require('../../models/addressSchema');
+const Order = require("../../models/orderSchema");
 const env = require("dotenv").config();
 const nodemailer = require("nodemailer");
 
@@ -572,7 +574,6 @@ const filterByPrice = async (req, res) => {
 
 const filterByPriceRange = async (req, res) => {
     try {
-       console.log(req.session.user,'req.session.user')
 
         const user = req.session.user;
         const userData = await User.findOne({ _id: user });
@@ -627,7 +628,6 @@ const addToCart = async (req, res) => {
         const userId = req.session.user;
         let cart = await Cart.findOne({ userId }).populate('items.productId'); 
 
-        console.log(cart, "cart");
         
         if (!cart) {
             return res.render('cart', { message: 'Your cart is empty.' }); 
@@ -872,6 +872,137 @@ const removeItem = async (req, res) => {
     }
 };
 
+const getCheckoutPage = async (req, res) => {
+    try {
+        const userId = req.session.user;
+    
+        const cart = await Cart.findOne({ userId }).populate('items.productId');
+
+        if (!cart || cart.items.length === 0) {
+            return res.redirect('/cart'); 
+        }
+
+        const addresses = await Address.find({ userId });
+
+        let subtotal = 0;
+        cart.items.forEach(item => {
+            subtotal += item.price * item.quantity;
+        });
+
+        let cartId = cart?._id
+        console.log(cartId,'cartid')
+        return res.render('checkout', {
+            cartItems: cart.items,
+            total:subtotal,
+            addresses,
+            cartId
+        });
+        
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server Error');
+    }
+};
+const getOrderConfirmationPage = async (req, res) => {
+    try {
+    
+
+        const orderId = req.query.orderId; 
+        console.log(orderId,'prderd')
+        const order = await Order.findOne({ _id:orderId }).sort({ createdAt: -1 });
+        console.log('Order retrieved:', order);
+
+        if (!order) {
+            return res.redirect('/cart'); 
+        }
+
+        console.log('Order confirmation page accessed');
+        
+        return res.render('orderconfirmation', {
+            orderId: order._id,
+            deliveryTime: '7 days', 
+            orderItems: order.items,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server Error');
+    }
+};
+
+
+const createOrder = async (req, res) => {
+    try {
+        const { cartId, addressId, paymentMethod } = req.body;
+        const cart = await Cart.findById({_id:cartId}).populate("items.productId");
+        if (!cart) {
+            return res.status(404).send('Cart not found');
+        }
+
+        const address = await Address.findOne({
+            "address._id": addressId
+        });
+
+        if (!address) {
+            return res.status(404).send('Address not found');
+        }
+
+        let totalPrice = 0;
+        for (let item of cart.items) {
+            const product = item.productId;
+            
+            const quantity = item.quantity;
+            
+            if (product.quantity < quantity) {
+                console.log('not ')
+                return res.status(400).send(`Not enough stock for product ${product.name}`);
+            }
+            product.quantity -= quantity; 
+            await product.save(); 
+
+            if (product.salePrice && !isNaN(product.salePrice)) {
+                totalPrice += product.salePrice * quantity;
+            } else {
+                console.error('Invalid sale price for product:', product.productName);
+                return res.status(400).send(`Invalid price for product ${product.productName}`);
+            }
+
+        }
+
+        const finalAmount = totalPrice;
+
+        if (isNaN(finalAmount) || finalAmount <= 0) {
+            console.error('Invalid total price calculation:', finalAmount);
+            return res.status(400).send('Invalid total price calculation');
+        }
+        
+        const newOrder = new Order({
+            orderedItems: cart.items.map(item => ({
+                products: item.productId,
+                quantity: item.quantity,
+                price: item.productId.saleprice,
+            })),
+            finalAmount,
+            address: addressId,
+            invoiceDate: new Date(),
+            status: "pending", 
+            coupenApplied: cart.coupenApplied,
+            paymentMethod
+        });
+        
+        await newOrder.save();
+        cart.items = [];
+        await cart.save();
+        res.status(201).json({
+            message: "Order placed successfully",
+            orderId: newOrder._id
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server Error');
+    }
+};
+
 
 module.exports = {
     loadHomepage,
@@ -893,5 +1024,8 @@ module.exports = {
     postAddToCart,
     incrementQuantity,
     decrementQuantity,
-    removeItem
+    removeItem,
+    getCheckoutPage,
+    getOrderConfirmationPage,
+    createOrder
 }
